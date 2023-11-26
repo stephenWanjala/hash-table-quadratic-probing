@@ -1,0 +1,30 @@
+# Compiled object files
+*.o
+
+# Compiled dynamic libraries
+*.so
+
+# Compiled executables
+*.exe
+
+# Compiled binaries
+bin/
+
+# IDE and editor files
+.vscode/
+.idea/
+
+# Build output directory
+build/
+
+# Dependency directories
+dependencies/
+
+# Generated files
+generated/
+
+# Debugging files
+debug/
+
+# Temporary files
+temp/
