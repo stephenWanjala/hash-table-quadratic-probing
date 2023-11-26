@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <cassert>
+#include <iomanip> 
 
 // A constant variable to store the load factor
 const double LOAD_FACTOR = 0.5;
@@ -121,35 +122,32 @@ public:
 
     // A function to insert a key-value pair into the hash table
     void insert(int key, int value) {
-        // Check if the key is within the range
-        if (key < 100 || key > 999) {
-            // Print an error message and return
-            std::cout << "Invalid key: " << key << std::endl;
-            return;
-        }
-
-        // Check if the load factor meets or exceeds the threshold
-        if (count >= size * LOAD_FACTOR) {
-            // Resize the array and rehash the elements
-            resize();
-        }
-
-        // Hash the key and get the index
-        int index = hash(key);
-
-        // Quadratic probing to find the next open spot
-        int i = 0;
-        while (table[(index + c1 * i + c2 * i * i) % size] != NULL) {
-            // Increment the probe number
-            i++;
-        }
-
-        // Insert the pair into the hash table
-        table[(index + c1 * i + c2 * i * i) % size] = new Pair(key, value);
-
+    // Check if the key is within the range
+    if (key < 100 || key > 999) {
+        // Print an error message and return
+        std::cout << "Invalid key: " << key << std::endl;
+        return;
+    }
+    // Check if the load factor meets or exceeds the threshold
+    if (count >= size * LOAD_FACTOR) {
+        // Resize the array and rehash the elements
+        resize();
+    }
+    // Hash the key and get the index
+    int index = hash(key);
+    // Check if the slot is empty
+    if (table[index] == NULL) {
+        // Create a new pair and store it in the slot
+        table[index] = new Pair(key, value);
         // Increment the count
         count++;
     }
+    else {
+        // Key already exists, update the value
+        table[index]->value = value;
+        std::cout << "Key already exists, value updated: " << key << std::endl;
+    }
+}
 
     // A function to search for a key and return the value
     int search(int key) {
@@ -176,21 +174,25 @@ public:
 
     // A function to print the hash table
     void print() {
-        // Loop through the array
-        for (int i = 0; i < size; i++) {
-            // Check if the slot is not empty
-            if (table[i] != NULL) {
-                // Print the key and value
-                std::cout << table[i]->key << " " << table[i]->value << " ";
-            }
-            else {
-                // Print an underscore
-                std::cout << "_ ";
-            }
+    // Print header
+    std::cout << std::setw(15) << "Index" << std::setw(15) << "Key" << std::setw(15) << "Value" << std::endl;
+    std::cout << std::setfill('-') << std::setw(45) << "" << std::setfill(' ') << std::endl;
+
+    // Loop through the array
+    for (int i = 0; i < size; i++) {
+        // Check if the slot is not empty
+        if (table[i] != NULL) {
+            // Print index, key, and value in a formatted way
+            std::cout << std::setw(15) << i << std::setw(15) << table[i]->key << std::setw(15) << table[i]->value << std::endl;
         }
-        // Print a new line
-        std::cout << std::endl;
+        else {
+            // Print an underscore for empty slots
+            std::cout << std::setw(15) << i << std::setw(15) << "_" << std::setw(15) << "_" << std::endl;
+        }
     }
+    std::cout << std::endl;
+}
+
 };
 void runTests() {
     // Test 1: Insert and Search
